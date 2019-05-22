@@ -42,8 +42,8 @@ public abstract class ContainerAllocationPolicy {
 
 		/**
 		 * Allocates a host for a given VM. The host to be allocated is the one that was already
-		 * reserved.
-		 * 为给定VM分配主机。要分配的主机是已经预留的主机。
+		 * reserved.注释错了
+		 * 为给定容器分配虚拟机。要分配的虚拟机是已经预留的虚拟机。
 		 *
 		 * @param container virtual machine which the host is reserved to
 		 * @return $true if the host could be allocated; $false otherwise
@@ -53,8 +53,8 @@ public abstract class ContainerAllocationPolicy {
 		public abstract boolean allocateVmForContainer(Container container,List<ContainerVm> containerVmList);
 
 		/**
-		 * Allocates a specified host for a given VM.
-		 * 为给定VM分配指定的主机。
+		 * Allocates a specified host for a given VM.注释错了
+		 * 为给定容器分配指定的虚拟机。
 		 *
 		 * @param vm virtual machine which the host is reserved to
 		 * @return $true if the host could be allocated; $false otherwise

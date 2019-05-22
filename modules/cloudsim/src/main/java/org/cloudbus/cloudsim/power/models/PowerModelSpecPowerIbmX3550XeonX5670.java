@@ -9,6 +9,8 @@
 package org.cloudbus.cloudsim.power.models;
 
 /**
+ * 两片CPU
+ * 所以一共是 12 cores, 2 chips, 6 cores/chip
  * The power model of an IBM server x3550 (2 x [Xeon X5670 2933 MHz, 6 cores], 12GB).<br/>
  * <a href="http://www.spec.org/power_ssj2008/results/res2010q2/power_ssj2008-20100315-00239.html">
  * http://www.spec.org/power_ssj2008/results/res2010q2/power_ssj2008-20100315-00239.html</a>

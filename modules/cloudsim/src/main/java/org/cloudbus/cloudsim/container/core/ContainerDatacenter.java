@@ -27,6 +27,7 @@ public class ContainerDatacenter extends SimEntity {
 
     /**
      * The regional cis name.
+     * 局部cis名字
      */
     private String regionalCisName;
 
@@ -816,11 +817,13 @@ public class ContainerDatacenter extends SimEntity {
                 Log.printLine("Therefore, it is not being executed again");
                 Log.printLine();
 
-                // NOTE: If a Cloudlet has finished, then it won't be processed.
-                // So, if ack is required, this method sends back a result.
-                // If ack is not required, this method don't send back a result.
-                // Hence, this might cause CloudSim to be hanged since waiting
-                // for this Cloudlet back.
+                /*
+                 NOTE: If a Cloudlet has finished, then it won't be processed.
+                 So, if ack is required, this method sends back a result.
+                 If ack is not required, this method don't send back a result.
+                 Hence, this might cause CloudSim to be hanged since waiting
+                 for this Cloudlet back.
+                 */
                 if (ack) {
                     int[] data = new int[3];
                     data[0] = getId();
@@ -1155,12 +1158,13 @@ public class ContainerDatacenter extends SimEntity {
         // this resource should register to regional GIS.
         // However, if not specified, then register to system GIS (the
         // default CloudInformationService) entity.
+        //获取注册中心的id
         int gisID = CloudSim.getEntityId(regionalCisName);
         if (gisID == -1) {
             gisID = CloudSim.getCloudInfoServiceEntityId();
         }
 
-        // send the registration to GIS
+        // send the registration to GIS，将注册发送到GIS
         sendNow(gisID, CloudSimTags.REGISTER_RESOURCE, getId());
         // Below method is for a child class to override
         registerOtherEntity();

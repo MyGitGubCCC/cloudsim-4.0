@@ -360,7 +360,7 @@ public class ContainerDatacenterBroker extends SimEntity {
 //        if (getVmsCreatedList().size() == getVmList().size() - getVmsDestroyed()) {
 //        If we have tried creating all of the vms in the data center, we submit the containers.
         if(getVmList().size() == vmsAcks){
-
+//如果虚拟机列表创建完，就创建容器列表
             submitContainers();
         }
 //        // all the requested VMs have been created

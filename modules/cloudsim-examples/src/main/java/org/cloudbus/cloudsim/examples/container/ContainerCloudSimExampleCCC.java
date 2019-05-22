@@ -15,6 +15,7 @@ import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Storage;
 import org.cloudbus.cloudsim.UtilizationModelNull;
+import org.cloudbus.cloudsim.container.containerPlacementPolicies.*;
 import org.cloudbus.cloudsim.container.containerProvisioners.ContainerBwProvisionerSimple;
 import org.cloudbus.cloudsim.container.containerProvisioners.ContainerPe;
 import org.cloudbus.cloudsim.container.containerProvisioners.ContainerRamProvisionerSimple;
@@ -24,11 +25,12 @@ import org.cloudbus.cloudsim.container.containerVmProvisioners.ContainerVmPe;
 import org.cloudbus.cloudsim.container.containerVmProvisioners.ContainerVmPeProvisionerSimple;
 import org.cloudbus.cloudsim.container.containerVmProvisioners.ContainerVmRamProvisionerSimple;
 import org.cloudbus.cloudsim.container.core.*;
-import org.cloudbus.cloudsim.container.hostSelectionPolicies.*;
+import org.cloudbus.cloudsim.container.hostSelectionPolicies.HostSelectionPolicy;
+import org.cloudbus.cloudsim.container.hostSelectionPolicies.HostSelectionPolicyFirstFit;
 import org.cloudbus.cloudsim.container.resourceAllocatorMigrationEnabled.PowerContainerVmAllocationPolicyMigrationAbstractHostSelection;
 import org.cloudbus.cloudsim.container.resourceAllocators.ContainerAllocationPolicy;
+import org.cloudbus.cloudsim.container.resourceAllocators.ContainerAllocationPolicyRS;
 import org.cloudbus.cloudsim.container.resourceAllocators.ContainerVmAllocationPolicy;
-import org.cloudbus.cloudsim.container.resourceAllocators.PowerContainerAllocationPolicySimple;
 import org.cloudbus.cloudsim.container.schedulers.ContainerCloudletSchedulerDynamicWorkload;
 import org.cloudbus.cloudsim.container.schedulers.ContainerSchedulerTimeSharedOverSubscription;
 import org.cloudbus.cloudsim.container.schedulers.ContainerVmSchedulerTimeSharedOverSubscription;
@@ -36,7 +38,6 @@ import org.cloudbus.cloudsim.container.utils.IDs;
 import org.cloudbus.cloudsim.container.vmSelectionPolicies.PowerContainerVmSelectionPolicy;
 import org.cloudbus.cloudsim.container.vmSelectionPolicies.PowerContainerVmSelectionPolicyMaximumUsage;
 import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.examples.power.Helper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,7 +50,7 @@ import java.util.List;
 /**
  * A simple example showing how to create a data center with one host, one VM, one container and run one cloudlet on it.
  */
-public class ContainerCloudSimExample1 {
+public class ContainerCloudSimExampleCCC {
 
     /**
      * The cloudlet list.
@@ -111,8 +112,12 @@ public class ContainerCloudSimExample1 {
              *定义容器分配策略。此策略确定如何将容器分配给数据中心中的vm。
              */
 
-
-            ContainerAllocationPolicy containerAllocationPolicy = new PowerContainerAllocationPolicySimple();
+            //使用最先适应容器的策略
+            //ContainerPlacementPolicy containerPlacementPolicy = new ContainerPlacementPolicyFirstFit();
+            ContainerPlacementPolicy containerPlacementPolicy = new ContainerPlacementPolicyCCC2();
+            //ContainerPlacementPolicy containerPlacementPolicy = new ContainerPlacementPolicyMostFull();
+            //ContainerPlacementPolicy containerPlacementPolicy = new ContainerPlacementPolicyLeastFull();
+            ContainerAllocationPolicy containerAllocationPolicy = new ContainerAllocationPolicyRS(containerPlacementPolicy);
 
             /**
              * 3-  Defining the VM selection Policy. This policy determines which VMs should be selected for migration
@@ -131,6 +136,7 @@ public class ContainerCloudSimExample1 {
              *
              */
             HostSelectionPolicy hostSelectionPolicy = new HostSelectionPolicyFirstFit();
+            //HostSelectionPolicy hostSelectionPolicy = new HostSelectionPolicyCCC1();
             /**
              * 5- Defining the thresholds for selecting the under-utilized and over-utilized hosts.
              */
@@ -139,10 +145,10 @@ public class ContainerCloudSimExample1 {
             double underUtilizationThreshold = 0.70;
             /**
              * 6- The host list is created considering the number of hosts, and host types which are specified
-             * in the {@link ConstantsExamples}.
+             * in the {@link ConstantsExamplesCCC}.
              */
             hostList = new ArrayList<ContainerHost>();
-            hostList = createHostList(ConstantsExamples.NUMBER_HOSTS);
+            hostList = createHostList(ConstantsExamplesCCC.NUMBER_HOSTS);
             cloudletList = new ArrayList<ContainerCloudlet>();
             vmList = new ArrayList<ContainerVm>();
             /**
@@ -163,9 +169,9 @@ public class ContainerCloudSimExample1 {
              * 9- Creating the cloudlet, container and VM lists for submitting to the broker.
              */
             //一个任务对应一个虚拟机，所以都用NUMBER_CLOUDLETS
-            cloudletList = createContainerCloudletList(brokerId, ConstantsExamples.NUMBER_CLOUDLETS);
-            containerList = createContainerList(brokerId, ConstantsExamples.NUMBER_CLOUDLETS);
-            vmList = createVmList(brokerId, ConstantsExamples.NUMBER_VMS);
+            cloudletList = createContainerCloudletList(brokerId, ConstantsExamplesCCC.NUMBER_CLOUDLETS);
+            containerList = createContainerList(brokerId, ConstantsExamplesCCC.NUMBER_CLOUDLETS);
+            vmList = createVmList(brokerId, ConstantsExamplesCCC.NUMBER_VMS);
             /**
              * 10- The address for logging the statistics of the VMs, containers in the data center.
              * 记录数据中心中vm、容器的统计信息的地址。
@@ -182,9 +188,9 @@ public class ContainerCloudSimExample1 {
             @SuppressWarnings("unused")
 			PowerContainerDatacenter e = (PowerContainerDatacenter) createDatacenter("datacenter",
                     PowerContainerDatacenterCM.class, hostList, vmAllocationPolicy, containerAllocationPolicy,
-                    getExperimentName("ContainerCloudSimExample-1", String.valueOf(overBookingFactor)),
-                    ConstantsExamples.SCHEDULING_INTERVAL, logAddress,
-                    ConstantsExamples.VM_STARTTUP_DELAY, ConstantsExamples.CONTAINER_STARTTUP_DELAY);
+                    getExperimentName("ContainerCloudSimExample-2", String.valueOf(overBookingFactor)),
+                    ConstantsExamplesCCC.SCHEDULING_INTERVAL, logAddress,
+                    ConstantsExamplesCCC.VM_STARTTUP_DELAY, ConstantsExamplesCCC.CONTAINER_STARTTUP_DELAY);
 
 
             /**
@@ -197,7 +203,7 @@ public class ContainerCloudSimExample1 {
              * 12- Determining the simulation termination time according to the cloudlet's workload.
              * 根据cloudlet的工作负载确定模拟终止时间。在86400.00后终止模拟，不再继续。
              */
-            CloudSim.terminateSimulation(86400.00);
+            CloudSim.terminateSimulation(ConstantsExamplesCCC.SIMULATION_LIMIT);
             /**
              * 13- Starting the simualtion.
              */
@@ -310,17 +316,17 @@ public class ContainerCloudSimExample1 {
             ArrayList<ContainerPe> peList = new ArrayList<ContainerPe>();
             //创建虚拟机时候，虚拟机被分成了4类
             int vmType = i / (int) Math.ceil((double) containerVmsNumber / 4.0D);
-            for (int j = 0; j < ConstantsExamples.VM_PES[vmType]; ++j) {
+            for (int j = 0; j < ConstantsExamplesCCC.VM_PES[vmType]; ++j) {
                 peList.add(new ContainerPe(j,
-                        new CotainerPeProvisionerSimple((double) ConstantsExamples.VM_MIPS[vmType])));
+                        new CotainerPeProvisionerSimple((double) ConstantsExamplesCCC.VM_MIPS[vmType])));
             }
             containerVms.add(new PowerContainerVm(IDs.pollId(ContainerVm.class), brokerId,
-                    (double) ConstantsExamples.VM_MIPS[vmType], (float) ConstantsExamples.VM_RAM[vmType],
-                    ConstantsExamples.VM_BW, ConstantsExamples.VM_SIZE, "Xen",
+                    (double) ConstantsExamplesCCC.VM_MIPS[vmType], (float) ConstantsExamplesCCC.VM_RAM[vmType],
+                    ConstantsExamplesCCC.VM_BW[vmType], ConstantsExamplesCCC.VM_SIZE, "Xen",
                     new ContainerSchedulerTimeSharedOverSubscription(peList),
-                    new ContainerRamProvisionerSimple(ConstantsExamples.VM_RAM[vmType]),
-                    new ContainerBwProvisionerSimple(ConstantsExamples.VM_BW),
-                    peList, ConstantsExamples.SCHEDULING_INTERVAL));
+                    new ContainerRamProvisionerSimple(ConstantsExamplesCCC.VM_RAM[vmType]),
+                    new ContainerBwProvisionerSimple(ConstantsExamplesCCC.VM_BW[vmType]),
+                    peList, ConstantsExamplesCCC.SCHEDULING_INTERVAL));
 
 
         }
@@ -329,7 +335,7 @@ public class ContainerCloudSimExample1 {
     }
 
     /**
-     * Create the host list considering the specs listed in the {@link ConstantsExamples}.
+     * Create the host list considering the specs listed in the {@link ConstantsExamplesCCC}.
      *
      * @param hostsNumber
      * @return
@@ -341,16 +347,16 @@ public class ContainerCloudSimExample1 {
         for (int i = 0; i < hostsNumber; ++i) {
             int hostType = i / (int) Math.ceil((double) hostsNumber / 3.0D);
             ArrayList<ContainerVmPe> peList = new ArrayList<ContainerVmPe>();
-            for (int j = 0; j < ConstantsExamples.HOST_PES[hostType]; ++j) {
+            for (int j = 0; j < ConstantsExamplesCCC.HOST_PES[hostType]; ++j) {
                 peList.add(new ContainerVmPe(j,
-                        new ContainerVmPeProvisionerSimple((double) ConstantsExamples.HOST_MIPS[hostType])));
+                        new ContainerVmPeProvisionerSimple((double) ConstantsExamplesCCC.HOST_MIPS[hostType])));
             }
 
             hostList.add(new PowerContainerHostUtilizationHistory(IDs.pollId(ContainerHost.class),
-                    new ContainerVmRamProvisionerSimple(ConstantsExamples.HOST_RAM[hostType]),
-                    new ContainerVmBwProvisionerSimple(1000000L), 1000000L, peList,
+                    new ContainerVmRamProvisionerSimple(ConstantsExamplesCCC.HOST_RAM[hostType]),
+                    new ContainerVmBwProvisionerSimple(ConstantsExamplesCCC.HOST_BW), ConstantsExamplesCCC.HOST_STORAGE, peList,
                     new ContainerVmSchedulerTimeSharedOverSubscription(peList),
-                    ConstantsExamples.HOST_POWER[hostType]));
+                    ConstantsExamplesCCC.HOST_POWER[hostType]));
         }
 
         return hostList;
@@ -377,7 +383,7 @@ public class ContainerCloudSimExample1 {
                                                        ContainerAllocationPolicy containerAllocationPolicy,
                                                        String experimentName, double schedulingInterval, String logAddress, double VMStartupDelay,
                                                        double ContainerStartupDelay) throws Exception {
-       /* String arch = "x86";
+        String arch = "x86";
         String os = "Linux";
         String vmm = "Xen";
         //定义时区，构造方法中好像没用，不知道是不是这样的。
@@ -387,7 +393,7 @@ public class ContainerCloudSimExample1 {
         //下面是定义每秒钟使用内存、存储、带宽的成本
         double costPerMem = 0.05D;
         double costPerStorage = 0.001D;
-        double costPerBw = 0.0D;
+        double costPerBw = 0.1D;
         ContainerDatacenterCharacteristics characteristics = new
                 ContainerDatacenterCharacteristics(arch, os, vmm, hostList, time_zone, cost, costPerMem, costPerStorage,
                 costPerBw);
@@ -395,10 +401,8 @@ public class ContainerCloudSimExample1 {
                 containerAllocationPolicy, new LinkedList<Storage>(), schedulingInterval, experimentName, logAddress,
                 VMStartupDelay, ContainerStartupDelay);
 
-        return datacenter;*/
-       //下面调用HelperEx创建数据中心的静态方法，与上面注释掉的代码一样，避免代码重复，调用了HelperEx.createDatacenter(...);
-        return HelperEx.createDatacenter(name,datacenterClass,hostList,vmAllocationPolicy,containerAllocationPolicy,experimentName,schedulingInterval,
-                logAddress,VMStartupDelay,ContainerStartupDelay);
+        return datacenter;
+
     }
 
     /**
@@ -411,13 +415,13 @@ public class ContainerCloudSimExample1 {
 
     public static List<Container> createContainerList(int brokerId, int containersNumber) {
         ArrayList<Container> containers = new ArrayList<Container>();
-        //根据容器的数量，把容器分成三类，每一类给予他们不同的属性，三种定义在ConstantsExamples中，分别是PES、RAM和BW的不同
+        //根据容器的数量，把容器分成三类，每一类给予他们不同的属性，三种定义在ConstantsExamplesCCC中，分别是PES、RAM和BW的不同
         for (int i = 0; i < containersNumber; ++i) {
             int containerType = i / (int) Math.ceil((double) containersNumber / 3.0D);
 
-            containers.add(new PowerContainer(IDs.pollId(Container.class), brokerId, (double) ConstantsExamples.CONTAINER_MIPS[containerType], ConstantsExamples.
-                    CONTAINER_PES[containerType], ConstantsExamples.CONTAINER_RAM[containerType], ConstantsExamples.CONTAINER_BW, 0L, "Xen",
-                    new ContainerCloudletSchedulerDynamicWorkload(ConstantsExamples.CONTAINER_MIPS[containerType], ConstantsExamples.CONTAINER_PES[containerType]), ConstantsExamples.SCHEDULING_INTERVAL));
+            containers.add(new PowerContainer(IDs.pollId(Container.class), brokerId, (double) ConstantsExamplesCCC.CONTAINER_MIPS[containerType], ConstantsExamplesCCC.
+                    CONTAINER_PES[containerType], ConstantsExamplesCCC.CONTAINER_RAM[containerType], ConstantsExamplesCCC.CONTAINER_BW[containerType], 0L, "Xen",
+                    new ContainerCloudletSchedulerDynamicWorkload(ConstantsExamplesCCC.CONTAINER_MIPS[containerType], ConstantsExamplesCCC.CONTAINER_PES[containerType]), ConstantsExamplesCCC.SCHEDULING_INTERVAL));
         }
 
         return containers;
@@ -433,24 +437,24 @@ public class ContainerCloudSimExample1 {
      */
     public static List<ContainerCloudlet> createContainerCloudletList(int brokerId, int numberOfCloudlets)
             throws FileNotFoundException {
-        String inputFolderName = ContainerCloudSimExample1.class.getClassLoader().getResource("workload/planetlab").getPath();
+        String inputFolderName = ContainerCloudSimExampleCCC.class.getClassLoader().getResource("workload/planetlab").getPath();
         ArrayList<ContainerCloudlet> cloudletList = new ArrayList<ContainerCloudlet>();
         long fileSize = 300L;
         long outputSize = 300L;
         UtilizationModelNull utilizationModelNull = new UtilizationModelNull();
-        java.io.File inputFolder1 = new java.io.File(inputFolderName);
-        java.io.File[] files1 = inputFolder1.listFiles();
+        File inputFolder1 = new File(inputFolderName);
+        File[] files1 = inputFolder1.listFiles();
         int createdCloudlets = 0;
-        for (java.io.File aFiles1 : files1) {
-            java.io.File inputFolder = new java.io.File(aFiles1.toString());
-            java.io.File[] files = inputFolder.listFiles();
+        for (File aFiles1 : files1) {
+            File inputFolder = new File(aFiles1.toString());
+            File[] files = inputFolder.listFiles();
             for (int i = 0; i < files.length; ++i) {
                 if (createdCloudlets < numberOfCloudlets) {
                     ContainerCloudlet cloudlet = null;
 
                     try {
                         //这个任务不考虑内存和带宽的使用情况,PE模型使用负载文件planetLab里面的文件。
-                        cloudlet = new ContainerCloudlet(IDs.pollId(ContainerCloudlet.class), ConstantsExamples.CLOUDLET_LENGTH, 1,
+                        cloudlet = new ContainerCloudlet(IDs.pollId(ContainerCloudlet.class), ConstantsExamplesCCC.CLOUDLET_LENGTH, 1,
                                 fileSize, outputSize,
                                 new UtilizationModelPlanetLabInMemoryExtended(files[i].getAbsolutePath(), 300.0D),
                                 utilizationModelNull, utilizationModelNull);

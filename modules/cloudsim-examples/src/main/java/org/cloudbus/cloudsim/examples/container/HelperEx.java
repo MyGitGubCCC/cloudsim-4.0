@@ -239,6 +239,7 @@ public class HelperEx {
         String os = "Linux";
         String vmm = "Xen";
         double time_zone = 10.0D;
+        //每秒钟的成本
         double cost = 3.0D;
         double costPerMem = 0.05D;
         double costPerStorage = 0.001D;

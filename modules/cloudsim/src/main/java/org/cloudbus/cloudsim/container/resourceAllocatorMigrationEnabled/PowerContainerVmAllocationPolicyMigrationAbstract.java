@@ -100,7 +100,7 @@ public abstract class PowerContainerVmAllocationPolicyMigrationAbstract extends 
 
         //记录开始选择高负载主机中的虚拟机进行调度
         ExecutionTimeMeasurer.start("optimizeAllocationVmSelection");
-        //更具虚拟机选择策略选出要迁移的虚拟机vmsToMigrate
+        //根据虚拟机选择策略选出要迁移的虚拟机vmsToMigrate
         List<? extends ContainerVm> vmsToMigrate = getVmsToMigrateFromHosts(overUtilizedHosts);
         //记录结束选择高负载主机中的虚拟机进行调度，并添加到vm的执行时间历史。
         getExecutionTimeHistoryVmSelection().add(ExecutionTimeMeasurer.end("optimizeAllocationVmSelection"));

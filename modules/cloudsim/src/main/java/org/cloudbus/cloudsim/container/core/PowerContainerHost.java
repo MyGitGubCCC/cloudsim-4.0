@@ -84,6 +84,7 @@ public class PowerContainerHost extends ContainerHostDynamicWorkload {
 
     /**
      * Gets the energy consumption using linear interpolation of the utilization change.
+     * 利用线性插值得到能源消耗的利用变化量。
      *
      * @param fromUtilization the from utilization
      * @param toUtilization   the to utilization

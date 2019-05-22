@@ -62,6 +62,7 @@ public class CloudSimTags {
 
 	/**
 	 * Denotes a cloud resource to be registered. This tag is normally used between
+	 * 表示想要注册云资源
 	 * {@link CloudInformationService} and CloudResouce entities.
 	 */
 	public static final int REGISTER_RESOURCE = BASE + 2;
@@ -137,6 +138,7 @@ public class CloudSimTags {
 	/**
 	 * Denotes request for cloud resource characteristics information. This tag is normally used
 	 * between CloudSim and CloudResource entity.
+	 * 表示对云资源特征信息的请求。这个标签通常在CloudSim和CloudResource实体之间使用*。
 	 */
 	public static final int RESOURCE_CHARACTERISTICS_REQUEST = BASE + 15;
 

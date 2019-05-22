@@ -64,7 +64,7 @@ public class Container {
     private String containerManager;
 
     /**
-     * The ContainerCloudlet scheduler.
+     * The ContainerCloudlet scheduler.容器任务调度器
      */
     private ContainerCloudletScheduler containerCloudletScheduler;
 
@@ -128,6 +128,11 @@ public class Container {
      * The scheduling interval.
      */
     private double schedulingInterval;
+
+    /**
+     * 依赖的容器镜像
+     */
+    private List<Container> relyContainerList;
 
 
     /**

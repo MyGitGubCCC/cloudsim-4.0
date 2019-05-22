@@ -2,6 +2,7 @@ package org.cloudbus.cloudsim.container.containerPlacementPolicies;
 
 
 import org.cloudbus.cloudsim.container.core.ContainerVm;
+import org.cloudbus.cloudsim.container.core.PowerContainer;
 
 import java.util.List;
 import java.util.Set;
@@ -16,8 +17,14 @@ public class ContainerPlacementPolicyFirstFit extends ContainerPlacementPolicy {
     @Override
     public ContainerVm getContainerVm(List<ContainerVm> vmList, Object obj, Set<? extends ContainerVm> excludedVmList) {
         ContainerVm containerVm = null;
+        PowerContainer container = (PowerContainer)obj;
         for (ContainerVm containerVm1 : vmList) {
             if (excludedVmList.contains(containerVm1)) {
+                continue;
+            }
+            if (containerVm1.getContainerScheduler().getAvailableMips() < container.getWorkloadMips()
+                    || containerVm1.getContainerRamProvisioner().getAvailableVmRam() <container.getRam()
+                    || containerVm1.getContainerBwProvisioner().getAvailableVmBw() < container.getBw()){
                 continue;
             }
             containerVm = containerVm1;

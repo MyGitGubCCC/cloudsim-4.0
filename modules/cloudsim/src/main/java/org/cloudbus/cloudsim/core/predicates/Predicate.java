@@ -12,7 +12,7 @@ import org.cloudbus.cloudsim.core.SimEvent;
 
 /**
  * Predicates are used to select events from the deferred queue, according to 
- * required criteria. 
+ * required criteria.
  * They are used internally the by {@link org.cloudbus.cloudsim.core.CloudSim} class
  * and aren't intended to be used directly by the user.
  * 
@@ -36,6 +36,7 @@ import org.cloudbus.cloudsim.core.SimEvent;
  * Maybe it was introduced with Java 8 (due to Stream and Lambda functions).
  * 
  */
+//谓词用于根据所需的条件从延迟队列中选择事件。
 public abstract class Predicate {
 
 	/**

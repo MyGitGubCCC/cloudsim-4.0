@@ -32,6 +32,9 @@ import org.cloudbus.cloudsim.core.predicates.Predicate;
  * @author Marcos Dias de Assuncao
  * @since CloudSim Toolkit 1.0
  */
+//如果一个类重写了 Object 内定义的 clone()方法 ，需要同时实现 Cloneable 接口（虽然这个接口内并没有定义 clone() 方法），
+// 否则会抛出异常，也就是说， Cloneable 接口只是个合法调用 clone() 的标识（marker-interface）。
+
 public abstract class SimEntity implements Cloneable {
 
 	/** The entity name. */
@@ -40,7 +43,7 @@ public abstract class SimEntity implements Cloneable {
 	/** The entity id. */
 	private int id;
 
-	/** The buffer for selected incoming events. */
+	/** The buffer for selected incoming events. 用于选定传入事件的缓冲区。*/
 	private SimEvent evbuf;
 
 	/** The entity's current state. */
@@ -420,6 +423,7 @@ public abstract class SimEntity implements Cloneable {
          * @see #processEvent(org.cloudbus.cloudsim.core.SimEvent) 
          */
 	public void run() {
+		//寻找延时队列中有没有事件的目标实体是指向目前调用run()方法的实体的，四个实体中的一个，根据事件中entDst来判断
 		SimEvent ev = evbuf != null ? evbuf : getNextEvent();
 
 		while (ev != null) {

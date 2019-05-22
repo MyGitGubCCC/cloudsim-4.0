@@ -46,6 +46,10 @@ public class Cloudlet {
      * cloudlet will spend 5 seconds using the processor in order to be
      * completed (that may be uninterrupted or not, depending on the scheduling
      * policy).
+     * 这个Cloudlet的执行长度(单位:百万指令(MI))。根据这个长度和运行cloudlet的处理器的能力
+     * (以每秒百万指令为单位——MIPS)， cloudlet将花费一定的时间来完成处理。
+     * 例如，对于运行在2000 MIPS处理器上的10000 MI的cloudlet，为了完成任务，
+     * cloudlet将使用处理器花费5秒(这可能是不间断的，也可能是间断的，这取决于调度策略)。
      *
      * @see #setNumberOfPes(int)
      *
@@ -55,12 +59,13 @@ public class Cloudlet {
     /**
      * The input file size of this Cloudlet before execution (unit: in byte).
      * This size has to be considered the program + input data sizes.
+     * 在执行之前Cloudlet的输入文件大小(单位:字节)。这个大小必须考虑程序+输入数据的大小。
      */
     private final long cloudletFileSize;
 
     /**
      * The output file size of this Cloudlet after execution (unit: in byte).
-     *
+     * 执行后这个Cloudlet的输出文件大小(单位:字节)。
      * @todo See
      * <a href="https://groups.google.com/forum/#!topic/cloudsim/MyZ7OnrXuuI">this
      * discussion</a>

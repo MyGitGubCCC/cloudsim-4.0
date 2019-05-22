@@ -229,14 +229,28 @@ public class PowerContainerDatacenter extends ContainerDatacenter {
                     "\nEnergy consumption for the last time frame from %.2f to %.2f:",
                     getLastProcessTime(),
                     currentTime);
-
+                    //double cloudsimClock = CloudSim.clock();
             for (PowerContainerHost host : this.<PowerContainerHost>getHostList()) {
                 double previousUtilizationOfCpu = host.getPreviousUtilizationOfCpu();
                 double utilizationOfCpu = host.getUtilizationOfCpu();
+                /**timeFrameHostEnergy为主机的cpu功耗，这里只考虑cpu，内存和带宽都没考虑进去，
+                 需要在这里进行修改，用timeDiff过去执行的时间来乘上单位内存和宽带的功耗
+                 1、下面修改加了内存的功耗timeFrameHosRamEnergy
+                 */
+                double timeFrameHostRamEnergy = getCharacteristics().getCostPerMem() * host.getContainerVmRamProvisioner().getUsedVmRam() * timeDiff;
+
+                //2、再加个带宽的功耗在里面
+                double timeFrameHostBwEnergy = getCharacteristics().getCostPerBw() * host.getContainerVmBwProvisioner().getUsedBw() * timeDiff;
+
                 double timeFrameHostEnergy = host.getEnergyLinearInterpolation(
                         previousUtilizationOfCpu,
                         utilizationOfCpu,
                         timeDiff);
+                //把内存的功耗加入总功耗里
+                timeFrameDatacenterEnergy += timeFrameHostRamEnergy;
+                //把带宽的功耗加入总功耗
+                timeFrameDatacenterEnergy += timeFrameHostBwEnergy;
+                //把cpu的功耗加入总功耗中
                 timeFrameDatacenterEnergy += timeFrameHostEnergy;
 
                 Log.printLine();
@@ -248,10 +262,22 @@ public class PowerContainerDatacenter extends ContainerDatacenter {
                         previousUtilizationOfCpu * 100,
                         utilizationOfCpu * 100);
                 Log.formatLine(
-                        "%.2f: [Host #%d] energy is %.2f W*sec",
+                        "%.2f: [Host #%d] CPU energy is %.2f W*sec",
                         currentTime,
                         host.getId(),
                         timeFrameHostEnergy);
+               //这里加入内存的功耗
+                Log.formatLine(
+                        "%.2f: [Host #%d] RAM energy is %.2f W*sec",
+                        currentTime,
+                        host.getId(),
+                        timeFrameHostRamEnergy);
+                //这里加入带宽的功耗
+                Log.formatLine(
+                        "%.2f: [Host #%d] BW energy is %.2f W*sec",
+                        currentTime,
+                        host.getId(),
+                        timeFrameHostBwEnergy);
             }
 
             Log.formatLine(

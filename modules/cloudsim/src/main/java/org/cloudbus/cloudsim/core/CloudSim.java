@@ -83,7 +83,7 @@ public class CloudSim {
 		traceFlag = _traceFlag;
 
 		// Set the current Wall clock time as the starting time of
-		// simulation
+		// simulation 将当前挂钟时间设置为仿真的起始时间
 		if (_calendar == null) {
 			calendar = Calendar.getInstance();
 		} else {
@@ -236,6 +236,7 @@ public class CloudSim {
 
 	/**
 	 * This method is called if one wants to terminate the simulation at a given time.
+	 * 调用此方法可以在指定时间终止模拟
 	 * 
 	 * @param time the time at which the simulation has to be terminated
 	 * @return true, if successful otherwise.
@@ -313,7 +314,7 @@ public class CloudSim {
 	/** The future event queue. */
 	protected static FutureQueue future;
 
-	/** The deferred event queue. */
+	/** The deferred event queue.延时队列 */
 	protected static DeferredQueue deferred;
 
 	/** 
@@ -772,13 +773,13 @@ public class CloudSim {
 				break;
 
 			case SimEvent.SEND:
-				// Check for matching wait
+				// Check for matching wait，获取要发送到的实体ID
 				dest = e.getDestination();
 				if (dest < 0) {
 					throw new IllegalArgumentException("Attempt to send to a null entity detected.");
 				} else {
 					int tag = e.getTag();
-					dest_ent = entities.get(dest);
+					dest_ent = entities.get(dest);//获取要送的实体
 					if (dest_ent.getState() == SimEntity.WAITING) {
 						Integer destObj = Integer.valueOf(dest);
 						Predicate p = waitPredicates.get(destObj);

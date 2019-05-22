@@ -10,6 +10,7 @@ package org.cloudbus.cloudsim.core;
 
 /**
  * This class represents a simulation event which is passed between the entities in the simulation.
+ * 该类表示在仿真中的实体之间传递的仿真事件。
  * 
  * @author Costas Simatos
  * @see Simulation

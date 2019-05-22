@@ -31,7 +31,8 @@ import org.cloudbus.cloudsim.Log;
 public class CloudInformationService extends SimEntity {
 
 	/** A list containing the id of all entities that are registered at the 
-         * Cloud Information Service (CIS). 
+         * Cloud Information Service (CIS).
+	     * 包含在云信息服务(CIS)中注册的所有实体的id的列表。
          * @todo It is not clear if this list is a list of host id's or datacenter id's.
          * The previous attribute documentation just said "For all types of hostList".
          * It can be seen at the method {@link #processEvent(org.cloudbus.cloudsim.core.SimEvent)}
@@ -43,7 +44,9 @@ public class CloudInformationService extends SimEntity {
 	private final List<Integer> resList;
 
 	/** A list containing only the id of entities with Advanced Reservation feature
-         * that are registered at the CIS. */
+       * that are registered at the CIS.
+	 * 仅包含在CIS中注册的具有高级预订功能的实体的id的列表。
+	 * */
 	private final List<Integer> arList;
 
 	/** List of all regional CIS. */
